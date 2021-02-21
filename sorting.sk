@@ -137,17 +137,17 @@ int[n] insertion(int n, int[n] in) {
 }
 
 harness void main(int n, int[n] in, int y) {
-	int limit = 11;
+	int limit = 5;
 	if(n != limit) {
 		return;
 	}
 	if(y < 0 || y >= n - 1) {
 		return;
 	}
-	//in = selection(limit, in);
+	in = selection(limit, in);
 	//in = merge(limit, in);
 	//in = quick(limit, in);
 	//in = insertion(limit, in);
-	in = bubble(limit, in);
+	//in = bubble(limit, in);
 	assert(in[y] <= in[y+1]);
 }
