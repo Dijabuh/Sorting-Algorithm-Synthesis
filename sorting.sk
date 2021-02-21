@@ -1,0 +1,153 @@
+#define CMP {| (CMPSRC (== | < | > | !=) CMPSRC )|}
+
+int[n] merge(int n, int[n] in) {
+
+	if({| n (> | < | == | !=) ?? |}) {
+		return in;
+	}
+
+	int lsize = n/2;
+	int rsize = n/2;
+
+	if({| n % 2 (> | < | == | !=) ?? |}) {
+		rsize++;
+	}
+
+	int[n] left;
+	int[n] right;
+
+	left[0::lsize] = merge(lsize, in[0::lsize]);
+	right[0::rsize] = merge(rsize, in[lsize::rsize]);
+
+	int li = 0;
+	int ri = 0;
+	int i = 0;
+	while({| i (< | > | == | !=) (((n (+|-) (0|1)))) |}) {
+		if({| ri (< | > | == | !=) rsize |} || ({| li (< | > | == | !=) lsize |} && {| (left[li] (== | < | >) right[ri]) |})){
+			in[i] = left[li++];
+		}
+		else {
+			in[i] = right[ri++];
+		}
+		i = {| i (+|-) ??|};
+	}
+	
+	return in;
+}
+
+int[n] quick(int n, int[n] in) {
+	if({| n (> | < | == | !=) ?? |}) {
+		return in;
+	}
+
+	int pivot = in[n-1];
+
+	int lsize = 0;
+	int rsize = 0;
+
+	int[n] left;
+	int[n] right;
+
+	int i = 0;
+	#define CMPSRC {| (pivot | in[i]) |}
+	while({| i (< | > | == | !=) (((n (+|-) (0|1)))) |}) {
+		if(CMP){
+			left[lsize] = in[i];
+			lsize++;
+		}
+		else {
+			right[rsize] = in[i];
+			rsize++;
+		}
+		i = {| i (+|-) ??|};
+	}
+	#undef CMPSRC
+
+	if({| lsize (> | < | == | !=) 0 |}) {
+		in[0::lsize] = quick(lsize, left[0::lsize]);
+	}
+	in[lsize] = pivot;
+	if({| rsize (> | < | == | !=) 0 |}) {
+		in[lsize+1::rsize] = quick(rsize, right[0::rsize]);
+	}
+	return in;
+}
+
+int[n] selection(int n, int[n] in) {
+	int i = 0;
+	while({| i (< | > | == | !=) (((n (+|-) (0|1)))) |}) {
+		int j = i+1;
+		int jmin = i;
+		while({| j (< | > | == | !=) (((n (+|-) (0|1)))) |}) {
+			#define CMPSRC {| (in[INDEX]) |}
+			#define INDEX {| (j|jmin) |}
+			if(CMP) {
+				jmin = j;
+			}
+			#undef CMPSRC
+			#undef INDEX
+			j = {| j (+|-) ?? |};
+		}
+		if({| jmin (== | < | > | !=) i |}) {
+			int temp = in[jmin];
+			in[jmin] = in[i];
+			in[i] = temp;
+		}
+
+		i = {| i (+|-) ??|};
+	}
+	return in;
+}
+
+int[n] bubble(int n, int[n] in) {
+	int swapped = ??;
+	while(swapped == ??) {
+		swapped = ??;
+		int i = 1;
+		while({| i (< | > | == | !=) (((n (+|-) (0|1)))) |}) {
+			#define CMPSRC {| (in[INDEX]) |}
+			#define INDEX {| i (+|-) ?? |}
+			if(CMP) {
+				swapped = ??;
+				int temp = in[i-1];
+				in[i-1] = in[i];
+				in[i] = temp;
+			}
+			#undef CMPSRC
+			#undef INDEX
+			i = {| i (+|-) ??|};
+		}
+	}
+	return in;
+}
+
+int[n] insertion(int n, int[n] in) {
+	int i = 1;
+	while({| i (< | > | == | !=) (((n (+|-) (0|1)))) |}) {
+		int j = i;
+		while({| (j (< | > | == | !=) ??) |} && {| (in[j(+|-)(0|1)] (< | > | == | !=) in[j(+|-)(0|1)]) |}) {
+			int temp = in[j-1];
+			in[j-1] = in[j];
+			in[j] = temp;
+			j = {| j (+|-) 1 |};
+		}
+		i = {| i (+|-) 1|};
+	}
+	return in;
+}
+
+harness void main(int n, int[n] in, int y) {
+	int limit = 11;
+	if(n != limit) {
+		return;
+	}
+	if(y < 0 || y >= n - 1) {
+		return;
+	}
+	//in = selection(limit, in);
+	//in = merge(limit, in);
+	//in = quick(limit, in);
+	//in = insertion(limit, in);
+	in = bubble(limit, in);
+	assert(in[y] <= in[y+1]);
+}
