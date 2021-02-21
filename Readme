@@ -1,0 +1,9 @@
+This is a project to generate code for several sorting algorithms using a program called sketch.
+
+To run, first install sketch version 1.7.6(https://people.csail.mit.edu/asolar/sketch-1.7.6.tar.gz).
+Then place the file sorting.sk in the folder sketch-frontend.
+On line 140 of sorting.sk, change the value of the variable limit to set the depth that sketch should unroll loops while generating a solution.
+On lines 147 to 151, uncomment the line for which sorting algorithm you want to be generated.
+To run sketch, use the command ./sketch sorting.sk. the output will be valid C code for the chosen algorithm.
+For larger values of the variable limit, the command line options --bnd-unroll-amnt X and --bnd-inline-amnt X, where X is an integer.
+Some combinations of sorting algorithm and limit size do not always produce code that correctly sorts. This is possibly due to a bug with sketch.
